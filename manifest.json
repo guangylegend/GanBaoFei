@@ -1,0 +1,55 @@
+{
+  "name": "GanBaoFei",
+  "version": "1.0.3",
+  "manifest_version": 3,
+  "description": "Revised Version",
+  "icons": {
+    "128": "main_icon.png"
+  },
+  "background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
+  "browser_action": {
+    "default_icon": {
+      "32": "bar_icon.png"
+    },
+    "default_title": "GanBaoFei",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://gbf.game.mbga.jp/*",
+		"http://game.granbluefantasy.jp/*"
+      ],
+      "js": [
+        "bower_components/jquery/dist/jquery.js",
+        "scripts/extra.js",
+        "scripts/contentscript3.js"
+	],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "permissions": [
+		"notifications",
+		"browsingData",
+		"tabs",
+		"storage",
+		"webRequest",
+		"webRequestBlocking",
+		"tabs",
+		"http://*/*",
+		"http://localhost:3000/*",
+		"https://search.yahoo.co.jp/*"
+  ],
+  "web_accessible_resources": [
+	"http://game.granbluefantasy.jp",
+    "reload.js",
+    "inject/click_.js",
+    "inject/load_.js",
+    "inject/engine.js"
+  ]
+}
