@@ -880,15 +880,18 @@ window.Engine = {
 			}
 			window.localStorage.setItem('oneSkill','false');
 			window.localStorage.setItem('summonPressed','false');
-			this.click(".btn-attack-start");
+			this.click('.btn-attack-start');
 			if (ballteCount == ballteCountTotal) {
 				if (window.localStorage.getItem('autorefresh') == 'true') {
-					setTimeout(function() {
-						window.location.reload();
-						this.Engine.start()
-					}, 1000);
+					this.waitOnce('.btn-chat.display-off').then(function(){
+						setTimeout(function() {
+							window.location.reload();
+							this.Engine.start()
+						}, 500);
+					}.bind(this));
 				}
 			}
+
 		}
 	}
 };
