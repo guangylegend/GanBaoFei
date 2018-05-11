@@ -198,14 +198,17 @@ var Client = {
         }.bind(this));*/
     },
 	'_handle_quest/stage': function() {
-		this.waitOnce('.btn-command-forward').then(function() {
+		this.waitUntilVisible('.btn-usual-ok').then(function() {
+			this.click('.btn-usual-ok:eq(1)');
+		}.bind(this));
+	/*	this.waitOnce('.btn-command-forward').then(function() {
 			this.click('.btn-command-forward');
 			this.sleep(1).then(function() {
 				if (window.location.hash.indexOf('stage') >= 0) {
 					this['_handle_quest/stage']();
 				}
 			}.bind(this));
-		}.bind(this));
+		}.bind(this));*/
 	},
 	'_handle_event': function() {
 		if (this.isFarmingQuest() && window.location.hash !== '#' + window.localStorage.getItem('quest-id')) {
