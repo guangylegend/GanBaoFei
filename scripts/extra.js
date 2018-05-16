@@ -5,7 +5,7 @@ window.Extra = {
 		var id = a[a.length - 1];
 		this.waitOnce('.txt-skill-level').then(function() {
 			var t = $('.txt-skill-level').text();
-			var level = t.split(' ')[1] 
+			var level = t.split(' ')[1]
 			window.localStorage.setItem(id, Number(level))
 		}.bind(this))
 	},
@@ -16,17 +16,19 @@ window.Extra = {
 				location.href = "http://"+window.location.host+"/#coopraid"
 			}else if (window.localStorage.getItem('autoSeachEx') === 'true') {
 				location.href = "http://"+window.location.host+"/#quest/assist"
-			}		
+			}
 		},2000)
 
-		
+
 	},
 	'_handle_result/empty': function() {
 		var self = this;
-		if (window.localStorage.getItem('raid-mode-watch-hell')=='true') {
+		if (window.localStorage.getItem('raid-mode-watch-hell') == 'true') {
+			location.href = "http://" + window.location.host + "/#" + "quest/extra/event";
+		} else if(window.localStorage.getItem('star-watch-hell')=='true'){
 			location.href = "http://"+window.location.host+"/#" + "quest/extra";
-		}else if (window.localStorage.getItem('quest-id')!=''){
-			location.href = "http://"+window.location.host+"/#"+window.localStorage.getItem('quest-id');
+		} else if (window.localStorage.getItem('quest-id') != '') {
+			location.href = "http://" + window.location.host + "/#" + window.localStorage.getItem('quest-id');
 		}else if (window.localStorage.getItem('autoSeachEx') === 'true' ||window.localStorage.getItem("isParty")== 'true') {
 			var bbc = setInterval(function() {
 				if ($('.btn-control').length > 0) {
@@ -35,7 +37,7 @@ window.Extra = {
 					self.click(".btn-usual-close")
 				}else if($('.btn-usual-ok').length > 0){
 					self.click(".btn-usual-ok:eq(0)")
-				}						
+				}
 				else
 				{
 					location.href = "http://"+window.location.host+"/#quest/assist";
@@ -67,8 +69,8 @@ window.Extra = {
 					self.click(".btn-usual-close")
 				}else if($('.btn-usual-ok').length > 0){
 					self.click(".btn-usual-ok:eq(0)")
-					
-				}						
+
+				}
 				else
 				{
 					location.href = "http://"+window.location.host+"/#quest/assist";
@@ -83,7 +85,7 @@ window.Extra = {
 					self.click(".btn-usual-close")
 				} else if($('.btn-usual-ok').length > 0){
 					self.click(".btn-usual-ok:eq(0)")
-					
+
 				} else {
 					location.href = "http://"+window.location.host+"/#coopraid";
 					clearInterval(bbc)
@@ -210,7 +212,7 @@ window.Extra = {
 				//var getNext = str.indexOf('ID：') + 30;
 				//var NextStr = str.substring(getNext);
 				//var s = NextStr.indexOf('ID：') + 3;
-				
+
 				//var e = NextStr.indexOf(' Lv');
 				//re = NextStr.substring(s,s+10).replace('<em>','').replace('</em>','').split(' ').join('').replace('Lv100','').replace('Lv75','').replace('Lv120','');
 				console.log("参战id=" + re)
@@ -255,18 +257,18 @@ window.Extra = {
 				if ($('.btn-usual-cancel').length > 0 && $('.btn-reset-quest').length > 0 ) {
 						self.click(".btn-use-full:eq(1)")
 				}
-				
+
 				if(!$(".btn-quest-start").length > 0){
 					$(".btn-usual-ok").attr("data-quest-id",window.localStorage.getItem('ptcoopraid'))
 					//console.log($(".btn-quest-start").length)
 					self.click(".btn-usual-ok")
 				}
-				
+
 				if(!$(".btn-quest-start").length > 0 && $(".btn-usual-ok").length < 1){
 					var d = document.createElement("div")
 					var b = document.createElement("div")
 					var c = document.querySelector(".prt-3tabs")
-					 
+
 					var setDetailElm = document.createElement("div");
 					setDetailElm.className = "pop-quest-detail";
 					setDetailElm.style.cursor = "default";
@@ -279,7 +281,7 @@ window.Extra = {
 					}
 					var setBtnElm = document.createElement("span")
 					setBtnElm.className = "btn-usual-ok"
-					setBtnElm.setAttribute("data-quest-id", window.localStorage.getItem('ptcoopraid')), 
+					setBtnElm.setAttribute("data-quest-id", window.localStorage.getItem('ptcoopraid')),
 					setBtnElm.setAttribute("data-ap", dataAp),
 					setBtnElm.setAttribute("data-required-rank", "10")
 					setBtnElm.textContent =  "罐子"
@@ -297,8 +299,8 @@ window.Extra = {
 				}
 			},3000);
 		}
-		
-		
+
+
 		if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
 			var coopReloadTime = 10000;
 			if (window.localStorage.getItem('setcoopreloadtime') == 'true' && window.localStorage.getItem('coopreloadtime') > 10) {
@@ -308,7 +310,7 @@ window.Extra = {
 				window.location.reload()
 			}, coopReloadTime)
 		}
-		
+
 		var room = setInterval(function() {
 			self.waitUntilVisible('.btn-make-ready-large.not-ready').then(function() {
 				self.click('.btn-make-ready-large.not-ready')

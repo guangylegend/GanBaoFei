@@ -113,9 +113,7 @@ var Client = {
 	},
 	'_handle_item': function() {
 		var self = this;
-		var getTimeOut = setTimeout(function() {
-			self.load(window.localStorage.getItem('quest-id'));
-		}, 20 * 1000);
+
 		if (window.localStorage.getItem('restore-action-point') !== 'true') {
 			return;
 		}
@@ -123,29 +121,48 @@ var Client = {
 		this.waitUntilVisible('.lis-item').then(function() {
 			return this.sleep(3);
 		}.bind(this)).then(function() {
-			if (this.restoreFullAP()) {
-				this.click('.prt-normal .lis-item.se[data-index=0]');
-				clearTimeout(getTimeOut);
-			} else {
-				this.click('.prt-normal .lis-item.se[data-index=1]');
-				clearTimeout(getTimeOut);
-			}
+			this.click('.btn-item-tabs.items');
+			return this.waitUntilVisible('.lis-item.btn-evolution-weapon');
+		}.bind(this)).then(function() {
+			console.log($('.lis-item.se'));
+			this.click('.lis-item.se[data-index=1]');
 			return this.waitUntilVisible('.btn-usual-use');
 		}.bind(this)).then(function() {
-			this.click('.btn-usual-use');
-			return this.sleep(2);
-		}.bind(this)).then(function() {
-			if (window.localStorage.getItem('raid-mode-watch-hell')=='true') {
-				this.load('quest/extra');
-				//this.load('quest/extra/event');
-			}else{
-				this.load(window.localStorage.getItem('quest-id'));
+			if(window.localStorage.getItem('use-full-red')){
+				$('.use-item-num')[0].value = $('.use-item-num')[0].childElementCount;
+				this.click('.btn-usual-use');
+				this.sleep(2).then(function() {
+					if (window.localStorage.getItem('raid-mode-watch-hell')=='true') {
+						this.load('quest/extra/event');
+					}
+					else if(window.localStorage.getItem('star-watch-hell')=='true'){
+						this.load('quest/extra');
+					}
+					else{
+						this.load(window.localStorage.getItem('quest-id'));
+					}
+				}.bind(this));
 			}
+			else if(window.localStorage.getItem('use-red')){
+				this.click('.btn-usual-use');
+				this.sleep(3).then(function() {
+					if (window.localStorage.getItem('raid-mode-watch-hell')=='true') {
+						this.load('quest/extra/event');
+					}
+					else if(window.localStorage.getItem('star-watch-hell')=='true'){
+						this.load('quest/extra');
+					}
+					else{
+						this.load(window.localStorage.getItem('quest-id'));
+					}
+				}.bind(this));
+			}
+			else return;
 		}.bind(this));
+
+
 	},
-	restoreFullAP: function() {
-		return window.localStorage.getItem('use-full') === 'true';
-	},
+
 	'_handle_quest/supporter/farm': function() {
 		if (!this.isFarmingQuest()) {
 			return;
@@ -166,36 +183,35 @@ var Client = {
 			this.inject('inject/load_.js')
 		}.bind(this));
 	},
+	'_handle_quest/extra/event': function () {
+		//check if hell quest exists
+		this.waitOnce('.btn-stage-detail').then(function () {
+			if ($('.btn-stage-detail.ex-hell').length > 0) {
+				console.log('hell quest found');
+				window.localStorage.setItem('hell-quest-encountered', true);
+				var hellQuestId = window.localStorage.getItem('hell-quest-id');
+				if (hellQuestId !== null && hellQuestId !== '') {
+					this.load(hellQuestId);
+				}
+			}
+			else if(window.localStorage.getItem('quest-id') !== "") {
+				window.localStorage.setItem('hell-quest-encountered', false);
+				this.load(window.localStorage.getItem('quest-id'));
+			}
+		}.bind(this));
+	},
 	'_handle_quest/extra': function() {
         //check if hell quest exists
-		this.waitOnce('.btn-stage-detail').then(function(){
-			//somewhat hardcode
-            if ($('.btn-stage-detail').length === 12) {
+        this.waitOnce('.btn-stage-detail').then(function(){
+            if ($('.ico-difficulty-8').length>0) {
                 console.log('hell quest found');
-				window.localStorage.setItem('hell-quest-encountered', true);
-                var hellQuestId = window.localStorage.getItem('hell-quest-id');
-                if (hellQuestId!==null && hellQuestId!=='') {
-                    this.load(hellQuestId);
-                }
-            } else {
-                window.localStorage.setItem('hell-quest-encountered', false);
+								window.localStorage.setItem('star-hell-quest-encountered', true);
+						}
+						else if(window.localStorage.getItem('quest-id') !== "") {
+                window.localStorage.setItem('star-hell-quest-encountered', false);
                 this.load(window.localStorage.getItem('quest-id'));
             }
         }.bind(this));
-	/*'_handle_quest/extra/event': function() {
-        this.waitOnce('.btn-stage-detail').then(function(){
-            if ($('.btn-stage-detail.ex-hell').length>0) {
-                console.log('hell quest found');
-				window.localStorage.setItem('hell-quest-encountered', true);
-                var hellQuestId = window.localStorage.getItem('hell-quest-id');
-                if (hellQuestId!==null && hellQuestId!=='') {
-                    this.load(hellQuestId);
-                }
-            } else {
-                window.localStorage.setItem('hell-quest-encountered', false);
-                this.load(window.localStorage.getItem('quest-id'));
-            }
-        }.bind(this));*/
     },
 
     // Auto skip farm battle - get item
@@ -342,31 +358,25 @@ var Client = {
 		}
 
 		// click OK or solve AP scarce
-		return this.sleep(1).then(function() {
+		return this.sleep(2).then(function() {
 			this.click(button);
 			return this.waitOnce('.btn-usual-ok');
 		}.bind(this)).then(function() {
 			if (Number($('.txt-stamina-after').text()) < 0) {
+				if (this.isFarmingQuest()) {
+					window.localStorage.setItem('restore-action-point', true);
+					this.load('item');
+				}
 				return Promise.resolve();
-			} else {
-				this.click('.btn-usual-ok');
-				//clearTimeout(bbc);
-				//return this.waitUntilVisible('div.prt-popup-header:contains("APが足りません"):visible');
-				return this.waitUntilVisible('.btn-usual-ok');
 			}
-		}.bind(this)).then(function() {
-			this.click('.btn-usual-ok');
-			/*if (this.isFarmingQuest()) {
-				window.localStorage.setItem('restore-action-point', true);
-				this.load('item');
-			}*/
+			else{
+				this.click('.btn-usual-ok');
+				return this.waitUntilVisible('.btn-usual-ok').then(function() {
+						this.click('.btn-usual-ok');
+				}.bind(this));
+			}
 		}.bind(this));
 
-		this.sleep(5).then(function() {
-			if (!$('.btn-usual-ok:visible').length) {
-				this.click(button);
-			}
-		}.bind(this));
 	},
 
 	'_handle_quest/supporter_raid': function() {
@@ -507,19 +517,24 @@ var Client = {
 	'_handle_result': function() {
 		if (this.isFarmingQuest()) {
 			console.log('farming quest result');
-            this.waitUntilVisible('.btn-usual-ok').then(function() {
-                this.click('.btn-usual-ok');
-            }.bind(this)).then(function(){
-                this.sleep(1);
-            }.bind(this)).then(function(){
-                if (window.localStorage.getItem('raid-mode-watch-hell')==='true') {
-                    this.load('quest/extra');
-					//this.load('quest/extra/event');
-                } else {
-                    this.load(window.localStorage.getItem('quest-id'));
-                }
-            }.bind(this));
-            return;
+			var bbc = setInterval(function () {
+				if ($('.btn-usual-ok').length > 0) {
+					this.click(".btn-usual-ok");
+				}
+				else if (window.localStorage.getItem('raid-mode-watch-hell')==='true') {
+          this.load('quest/extra/event');
+					clearInterval(bbc);
+        }
+				else if (window.localStorage.getItem('star-watch-hell')==='true'){
+					this.load('quest/extra');
+					clearInterval(bbc);
+				}
+				else {
+          this.load(window.localStorage.getItem('quest-id'));
+					clearInterval(bbc);
+				}
+			}.bind(this), 2000)
+			return;
 		}
 		this.change(function(mutations) {
 			mutations.forEach(function(mutation) {
