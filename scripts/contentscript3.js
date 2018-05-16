@@ -34,7 +34,7 @@ var Client = {
 			console.log(evt.detail);
 		});
 	},
-	
+
 	handleEvent: function() {
 		var hash = window.location.hash.replace('#', '');
 		var a = hash.split('/');
@@ -170,7 +170,7 @@ var Client = {
         //check if hell quest exists
 		this.waitOnce('.btn-stage-detail').then(function(){
 			//somewhat hardcode
-            if ($('.btn-stage-detail').length === 12) {           
+            if ($('.btn-stage-detail').length === 12) {
                 console.log('hell quest found');
 				window.localStorage.setItem('hell-quest-encountered', true);
                 var hellQuestId = window.localStorage.getItem('hell-quest-id');
@@ -208,7 +208,7 @@ var Client = {
 
 		// old UI version
 
-		/*	
+		/*
 		this.waitOnce('.btn-command-forward').then(function() {
 			this.click('.btn-command-forward');
 			this.sleep(1).then(function() {
@@ -282,7 +282,7 @@ var Client = {
 		var button = '';
 		var expected = prefs.some(function(summon) {
 			var supporters = $('div.prt-supporter-summon:contains("' + summon + '")');
-			
+
 			if (supporters.length) {
 				var candidates = [];
 				supporters.each(function() {
@@ -299,7 +299,7 @@ var Client = {
 				candidates = candidates.sort(function(a, b) {
 					return a.effectAmount < b.effectAmount;
 				});
-				
+
 
 				var userID = candidates[0].id;
 				var effectAmount = candidates[0].effectAmount;
@@ -341,30 +341,34 @@ var Client = {
 			}
 		}
 
-		return this.sleep(3).then(function() {
+		// click OK or solve AP scarce
+		return this.sleep(1).then(function() {
 			this.click(button);
-			return this.waitOnce('.se-quest-start');
+			return this.waitOnce('.btn-usual-ok');
 		}.bind(this)).then(function() {
 			if (Number($('.txt-stamina-after').text()) < 0) {
 				return Promise.resolve();
 			} else {
-				this.click('.se-quest-start');
+				this.click('.btn-usual-ok');
 				//clearTimeout(bbc);
-				return this.waitUntilVisible('div.prt-popup-header:contains("APが足りません"):visible');
+				//return this.waitUntilVisible('div.prt-popup-header:contains("APが足りません"):visible');
+				return this.waitUntilVisible('.btn-usual-ok');
 			}
 		}.bind(this)).then(function() {
-			if (this.isFarmingQuest()) {
+			this.click('.btn-usual-ok');
+			/*if (this.isFarmingQuest()) {
 				window.localStorage.setItem('restore-action-point', true);
 				this.load('item');
-			}
+			}*/
 		}.bind(this));
+
 		this.sleep(5).then(function() {
-			if (!$('.se-quest-start:visible').length) {
+			if (!$('.btn-usual-ok:visible').length) {
 				this.click(button);
 			}
 		}.bind(this));
 	},
-	
+
 	'_handle_quest/supporter_raid': function() {
 		var self = this;
 		if (window.localStorage.getItem('autoSeachEx') === 'true') {
@@ -486,7 +490,7 @@ var Client = {
 					self.click(".btn-usual-close")
 				}else if($('.btn-usual-ok').length > 0){
 					self.click(".btn-usual-ok:eq(0)")
-					
+
 				}	 else {
 					location.href = "http://"+window.location.host+"/#coopraid";
 					clearInterval(bbc)
