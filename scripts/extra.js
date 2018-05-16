@@ -187,61 +187,93 @@ window.Extra = {
 			window.localStorage.setItem('assistIsClick', 'false')
 		}, 20000);
 		if (window.localStorage.getItem('autoSeachEx') === 'true') {
-			var bbe = setInterval(function() {
-				if ($('.btn-post-key').length = 0) {
-					self.click(".btn-tabs:eq(2)");
-					clearInterval(bbe)
+			if (window.localStorage.getItem("ptSearchType") == '1') {
+				for (var i = 1; i <= 6; i++) {
+					if (window.localStorage.getItem("seachEx-" + i) != "") {
+						exLis.push(window.localStorage.getItem("seachEx-" + i))
+					}
 				}
-			}, 1000);
-			var searchName = window.localStorage.getItem('seachTwitter');
-			var requesturl = "http://search.yahoo.co.jp/realtime/search?p=参加者募集+" + searchName + "&ei=UTF-8";
-			var re = "";
-			var bbdb = setInterval(function() {
-				var htmlobj = $.ajax({
-					url: requesturl,
-					async: false
-				});
-				var str = htmlobj.responseText;
-				//console.log("str========" + str)
-				var getNext = str.indexOf(':参戦ID <em>') + 30;
-				var NextStr = str.substring(getNext);
-				var s = NextStr.indexOf(':参戦ID <em>') - 9;
-				re = NextStr.substring(s,s+8);
-				//var getNext = str.indexOf('ID：') + 30;
-				//var NextStr = str.substring(getNext);
-				//var s = NextStr.indexOf('ID：') + 3;
-				
-				//var e = NextStr.indexOf(' Lv');
-				//re = NextStr.substring(s,s+10).replace('<em>','').replace('</em>','').split(' ').join('').replace('Lv100','').replace('Lv75','').replace('Lv120','');
-				console.log("参战id=" + re)
-				if (document.querySelector('.frm-battle-key')&&document.querySelector('.frm-battle-key').type == 'text') {
-					document.querySelector('.frm-battle-key').value = re;
-				}
-				if ($('.btn-post-key').length > 0 && document.querySelector('.frm-battle-key').type == 'text') {
-					self.click(".btn-post-key")
-				}
-			}, 2000);
-			var bbb = setInterval(function() {
-				console.log("isClick=" + window.localStorage.getItem('assistIsClick'));
-				if ($('.btn-use-full').length > 0) {
-					self.click(".btn-use-full:eq(1)")
-				}
-				if ($('.btn-usual-ok').length == 1) {
-					self.click(".btn-usual-ok")
-				}
-			}, 1000);
-			var bbf = setInterval(function() {
-				if (document.querySelector('.frm-battle-key').type == 'password') {
-					document.querySelector('.frm-battle-key').type = 'text';
-					document.querySelector('.frm-battle-key').value = re;
-					clearInterval(bbf)
-				}
-			}, 5000);
-			var bbd = setTimeout(function() {
-				if (window.localStorage.getItem('assistIsClick') == 'false') {
-					window.location.reload()
-				}
-			}, 20000)
+				var bbb = setInterval(function() {
+					console.log("isClick ========================" + window.localStorage.getItem('assistIsClick'));
+					if ($('.btn-use-full').length > 0) {
+						self.click(".btn-use-full:eq(1)")
+					}
+					if ($('.btn-usual-ok').length == 1) {
+						self.click(".btn-usual-ok")
+					}
+				}, 5000);
+				var bbc = setInterval(function() {
+					for (var i = 0; i < $(".btn-multi-raid").length; i++) {
+						var mu_index = exLis.indexOf($(".btn-multi-raid:eq(" + i + ")").attr("data-quest-id"));
+						if (mu_index >= 0 && window.localStorage.getItem('assistIsClick') == 'false') {
+							self.click(".btn-multi-raid:eq(" + i + ")");
+							return
+						}
+					}
+				}, 1000);
+				var bbd = setTimeout(function() {
+					if (window.localStorage.getItem('assistIsClick') == 'false') {
+						window.location.reload()
+					}
+				}, 20000)
+			}
+			if (window.localStorage.getItem("ptSearchType") == '2') {
+				var bbe = setInterval(function() {
+					if ($('.btn-post-key').length = 0) {
+						self.click(".btn-tabs:eq(2)");
+						clearInterval(bbe)
+					}
+				}, 1000);
+				var searchName = window.localStorage.getItem('seachTwitter');
+				var requesturl = "http://search.yahoo.co.jp/realtime/search?p=参加者募集+" + searchName + "&ei=UTF-8";
+				var re = "";
+				var bbdb = setInterval(function() {
+					var htmlobj = $.ajax({
+						url: requesturl,
+						async: false
+					});
+					var str = htmlobj.responseText;
+					//console.log("str========" + str)
+					var getNext = str.indexOf(':参戦ID <em>') + 30;
+					var NextStr = str.substring(getNext);
+					var s = NextStr.indexOf(':参戦ID <em>') - 9;
+					re = NextStr.substring(s,s+8);
+					//var getNext = str.indexOf('ID：') + 30;
+					//var NextStr = str.substring(getNext);
+					//var s = NextStr.indexOf('ID：') + 3;
+					
+					//var e = NextStr.indexOf(' Lv');
+					//re = NextStr.substring(s,s+10).replace('<em>','').replace('</em>','').split(' ').join('').replace('Lv100','').replace('Lv75','').replace('Lv120','');
+					console.log("参战id=" + re)
+					if (document.querySelector('.frm-battle-key')&&document.querySelector('.frm-battle-key').type == 'text') {
+						document.querySelector('.frm-battle-key').value = re;
+					}
+					if ($('.btn-post-key').length > 0 && document.querySelector('.frm-battle-key').type == 'text') {
+						self.click(".btn-post-key")
+					}
+				}, 2000);
+				var bbb = setInterval(function() {
+					console.log("isClick=" + window.localStorage.getItem('assistIsClick'));
+					if ($('.btn-use-full').length > 0) {
+						self.click(".btn-use-full:eq(1)")
+					}
+					if ($('.btn-usual-ok').length == 1) {
+						self.click(".btn-usual-ok")
+					}
+				}, 1000);
+				var bbf = setInterval(function() {
+					if (document.querySelector('.frm-battle-key').type == 'password') {
+						document.querySelector('.frm-battle-key').type = 'text';
+						document.querySelector('.frm-battle-key').value = re;
+						clearInterval(bbf)
+					}
+				}, 5000);
+				var bbd = setTimeout(function() {
+					if (window.localStorage.getItem('assistIsClick') == 'false') {
+						window.location.reload()
+					}
+				}, 20000)
+			}
 		}
 	},
 	'_handle_coopraid/room': function() {

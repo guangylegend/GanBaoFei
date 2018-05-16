@@ -197,30 +197,19 @@ var Client = {
             }
         }.bind(this));*/
     },
-
-    // Auto skip farm battle - get item
-    // Assume farm battle skip is ON
-
 	'_handle_quest/stage': function() {
 		this.waitUntilVisible('.btn-usual-ok').then(function() {
 			this.click('.btn-usual-ok:eq(1)');
 		}.bind(this));
-
-		// old UI version
-
-		/*	
-		this.waitOnce('.btn-command-forward').then(function() {
+	/*	this.waitOnce('.btn-command-forward').then(function() {
 			this.click('.btn-command-forward');
 			this.sleep(1).then(function() {
 				if (window.location.hash.indexOf('stage') >= 0) {
 					this['_handle_quest/stage']();
 				}
 			}.bind(this));
-		}.bind(this));
-		*/
+		}.bind(this));*/
 	},
-
-
 	'_handle_event': function() {
 		if (this.isFarmingQuest() && window.location.hash !== '#' + window.localStorage.getItem('quest-id')) {
 			this.load(window.localStorage.getItem('quest-id'));
@@ -232,14 +221,9 @@ var Client = {
 			}.bind(this));
 		}
 	},
-
 	getPreference: function(key) {
 		return window.localStorage.getItem(key);
 	},
-
-	// Auto choose supporter by preference
-	// three options: matrix. zeus, attribute
-
 	chooseSupporterByPref: function() {
 		if (window.localStorage.getItem('assistIsClick')) {
 			window.localStorage.setItem('assistIsClick', 'true');
@@ -274,10 +258,6 @@ var Client = {
 			prefs.push('ホワイトラビット');
 			prefs.push('ブラックラビット');
 		}
-
-
-		// fixed issues with random select and suboptimal select
-		// add sorting and optimize searching
 
 		var button = '';
 		var expected = prefs.some(function(summon) {
@@ -364,7 +344,6 @@ var Client = {
 			}
 		}.bind(this));
 	},
-	
 	'_handle_quest/supporter_raid': function() {
 		var self = this;
 		if (window.localStorage.getItem('autoSeachEx') === 'true') {
