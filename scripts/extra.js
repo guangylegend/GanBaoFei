@@ -195,7 +195,7 @@ window.Extra = {
 					clearInterval(bbe)
 				}
 			}, 1000);
-			
+
 			var searchName = window.localStorage.getItem('seachTwitter');
 			var requesturl = "http://search.yahoo.co.jp/realtime/search?p=参加者募集+" + searchName + "&ei=UTF-8";
 			var re = "";
@@ -279,36 +279,5 @@ window.Extra = {
 				self.click('.btn-quest-start.se-quest-start')
 			}.bind(self))
 		}, 1000)
-	},
-	'_handle_coopraid/offer': function() {
-		this.waitUntilVisible('.btn-wanted-room').then(function() {
-			var self = this;
-			var key = null;
-			$('.prt-wanted-room.btn-wanted-room').each(function() {
-				if ($(this).find('.prt-member-icon').length < 3 && $(this).find('.prt-invite-type-1').length > 0) {
-					key = $(this)[0].dataset.indexKey;
-					return false
-				}
-			});
-			if (key) {
-				this.click('.btn-wanted-room[data-index-key=' + key + ']');
-				return this.waitUntilVisible('.btn-usual-join').then(function() {
-					this.click('.btn-usual-join');
-					return this.waitUntilVisible('.btn-usual-ok')
-				}.bind(this)).then(function() {
-					this.click('.btn-usual-ok');
-					return this.sleep(1)
-				}.bind(this))
-			} else {
-				return this.sleep(1)
-			}
-		}.bind(this)).then(function() {
-			this.click('.btn-refresh-list');
-			return this.sleep(1)
-		}.bind(this)).then(function() {
-			return this.waitUntilInvisible('#loading')
-		}.bind(this)).then(function() {
-			this['_handle_coopraid/offer']()
-		}.bind(this))
 	}
 }
