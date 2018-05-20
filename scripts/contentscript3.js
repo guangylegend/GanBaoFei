@@ -492,7 +492,7 @@ var Client = {
 	},
 	'_handle_result_multi': function() {
 		var self = this;
-	    if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
+	    if (window.localStorage.getItem('coopraid') == 'true') {
 			var bbc = setInterval(function() {
 				if ($('.btn-control').length > 0) {
 					self.click(".btn-control")

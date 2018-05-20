@@ -12,7 +12,7 @@ window.Extra = {
 	'_handle_mypage': function() {
 		console.log("111 = " + window.localStorage.getItem('seachEx-1'));
 		var cc = setTimeout(function(){
-			if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
+			if (window.localStorage.getItem('coopraid') == 'true') {
 				location.href = "http://"+window.location.host+"/#coopraid"
 			}else if (window.localStorage.getItem('autoSeachEx') === 'true') {
 				location.href = "http://"+window.location.host+"/#quest/assist"
@@ -44,7 +44,7 @@ window.Extra = {
 					clearInterval(bbc)
 				}
 			}, 2000)
-		} else if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
+		} else if (window.localStorage.getItem('coopraid') == 'true') {
 			var bbc = setInterval(function() {
 				if ($('.btn-control').length > 0) {
 					self.click(".btn-control")
@@ -77,7 +77,7 @@ window.Extra = {
 					clearInterval(bbc)
 				}
 			}, 2000)
-		} else if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
+		} else if (window.localStorage.getItem('coopraid') == 'true') {
 			var bbc = setInterval(function() {
 				if ($('.btn-control').length > 0) {
 					self.click(".btn-control")
@@ -95,7 +95,7 @@ window.Extra = {
 	},
 	'_handle_quest': function() {
 		var self = this;
-		if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
+		if (window.localStorage.getItem('coopraid') == 'true') {
 			location.href = "http://"+window.location.host+"/#coopraid"
 		}
 		if (window.localStorage.getItem('autoSeachEx') === 'true') {
@@ -117,7 +117,7 @@ window.Extra = {
 	},
 	'_handle_quest/index': function() {
 		var self = this;
-		if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
+		if (window.localStorage.getItem('coopraid') == 'true') {
 			location.href = "http://"+window.location.host+"/#coopraid"
 		} else if (window.localStorage.getItem('autoSeachEx') === 'true') {
 			var bbc = setInterval(function() {
@@ -195,6 +195,7 @@ window.Extra = {
 					clearInterval(bbe)
 				}
 			}, 1000);
+			
 			var searchName = window.localStorage.getItem('seachTwitter');
 			var requesturl = "http://search.yahoo.co.jp/realtime/search?p=参加者募集+" + searchName + "&ei=UTF-8";
 			var re = "";
@@ -248,73 +249,29 @@ window.Extra = {
 	},
 	'_handle_coopraid/room': function() {
 		var self = this;
-		if (window.localStorage.getItem('master') == 'true') {
-			var startRoom = setInterval(function(){
-				if ($('.btn-use-full').length > 0) {
-					self.click(".btn-use-full:eq(1)")
-				}
-					//btn-usual-cancel
-				if ($('.btn-usual-cancel').length > 0 && $('.btn-reset-quest').length > 0 ) {
-						self.click(".btn-use-full:eq(1)")
-				}
-
-				if(!$(".btn-quest-start").length > 0){
-					$(".btn-usual-ok").attr("data-quest-id",window.localStorage.getItem('ptcoopraid'))
-					//console.log($(".btn-quest-start").length)
-					self.click(".btn-usual-ok")
-				}
-
-				if(!$(".btn-quest-start").length > 0 && $(".btn-usual-ok").length < 1){
-					var d = document.createElement("div")
-					var b = document.createElement("div")
-					var c = document.querySelector(".prt-3tabs")
-
-					var setDetailElm = document.createElement("div");
-					setDetailElm.className = "pop-quest-detail";
-					setDetailElm.style.cursor = "default";
-
-					var dataAp = "0";
-					if(window.localStorage.getItem('ptcoopraid') == "601011"){
-						dataAp = "20";
-					}else{
-						dataAp = "40";
-					}
-					var setBtnElm = document.createElement("span")
-					setBtnElm.className = "btn-usual-ok"
-					setBtnElm.setAttribute("data-quest-id", window.localStorage.getItem('ptcoopraid')),
-					setBtnElm.setAttribute("data-ap", dataAp),
-					setBtnElm.setAttribute("data-required-rank", "10")
-					setBtnElm.textContent =  "罐子"
-					setBtnElm.style.fontSize = "10px"
-					setBtnElm.style.padding = "0px"
-					setBtnElm.style.height = "17px"
-					setBtnElm.style.width = "105px"
-					setBtnElm.style.backgroundImage = "url()"
-					setBtnElm.style.backgroundColor = ""
-					setDetailElm.appendChild(setBtnElm);
-					b.style.position = "relative";
-					b.style.position = "relative";
-					b.appendChild(setDetailElm);
-					c.parentNode.insertBefore(b, c)
-				}
-			},3000);
-		}
-
-
-		if ((window.localStorage.getItem('master') == 'true') || (window.localStorage.getItem('coopraid') == 'true')) {
-			var coopReloadTime = 10000;
-			if (window.localStorage.getItem('setcoopreloadtime') == 'true' && window.localStorage.getItem('coopreloadtime') > 10) {
-				coopReloadTime = window.localStorage.getItem('coopreloadtime') * 1000;
+		var startRoom = setInterval(function(){
+			if ($('.btn-use-full').length > 0) {
+				var num = $('.use-item-num')[1].childElementCount;
+				$('.btn-use-full')[1].setAttribute('data-use-num', num);
+				$('.btn-use-full')[1].setAttribute('data-after-sp', '999');
+				self.click(".btn-use-full:eq(1)")
 			}
+			if(!$(".btn-quest-start").length > 0){
+				self.click(".btn-usual-ok")
+			}
+		},1000);
+
+		if (window.localStorage.getItem('coopraid') == 'true') {
+			var coopReloadTime = 10000;
 			setTimeout(function() {
 				window.location.reload()
 			}, coopReloadTime)
 		}
 
 		var room = setInterval(function() {
-			self.waitUntilVisible('.btn-make-ready-large.not-ready').then(function() {
+			/*self.waitUntilVisible('.btn-make-ready-large.not-ready').then(function() {
 				self.click('.btn-make-ready-large.not-ready')
-			}.bind(self));
+			}.bind(self));*/
 			self.waitUntilVisible('.btn-execute-ready.se-ok').then(function() {
 				self.click('.btn-execute-ready.se-ok')
 			}.bind(self));

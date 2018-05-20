@@ -76,17 +76,9 @@ var Popup = {
 	$('#summon-6').val(window.localStorage.getItem('summon-6'));
 	
 	$('#seachTwitter').val(window.localStorage.getItem('seachTwitter'));
-	$('#seachEx-1').val(window.localStorage.getItem('seachEx-1'));
-	$('#seachEx-2').val(window.localStorage.getItem('seachEx-2'));
-	$('#seachEx-3').val(window.localStorage.getItem('seachEx-3'));	
-	$('#seachEx-4').val(window.localStorage.getItem('seachEx-4'));
-	$('#seachEx-5').val(window.localStorage.getItem('seachEx-5'));
-	$('#seachEx-6').val(window.localStorage.getItem('seachEx-6'));	
 	$('#saveList').on('click', function() {
 		$("#seachTwitter").trigger('change');
-		for(var i=1;i<=6;i++){
-			    $("#seachEx-"+i).trigger('change');
-	}});	
+	});	
 	$('#saveList').on('click', function() {
 		for(var i=1;i<=4;i++){
 			for(var j=1;j<=4;j++){
